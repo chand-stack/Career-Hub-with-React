@@ -5,38 +5,44 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+
 import Root from './Components/Root/Root';
-import Home from './Components/Home/Home';
-import AppliedJobs from './Components/AppliedJobs/AppliedJobs';
-import ErrorPage from './Components/ErrorPage/ErrorPage';
-import JobDetails from './JobDetails/JobDetails';
+import AppliedJobs from './Components/Root/AppliedJobs/AppliedJobs';
+import Blog from './Components/Root/Blog/Blog';
+import Home from './Components/Root/Home/Home';
+import JobDetail from './Components/JobDetail/JobDetail';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path:'/',
     element: <Root></Root>,
-    errorElement : <ErrorPage></ErrorPage>,
     children: [
       {
-        path:'/',
+        path:'/applied',
+        element: <AppliedJobs/>,
+        loader : () => fetch('../public/jobs.json')
+      },
+      {
+        path:'/blog',
+        element: <Blog/>
+      },
+      {
+        path: '/',
         element: <Home></Home>
       },
       {
-        path:'/applied',
-        element:<AppliedJobs></AppliedJobs>,
-        loader: () => fetch('../jobs.json')
-      },
-      {
-        path: '/job/:id',
-        element: <JobDetails></JobDetails>,
-        loader: () => fetch('../jobs.json')
+        path: '/detail/:Id',
+        element: <JobDetail></JobDetail>,
+        loader: () => fetch('../public/jobs.json')
       }
     ]
-  },
-]);
+  }
+])
+
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+   <RouterProvider router={router}/>
   </React.StrictMode>,
 )
